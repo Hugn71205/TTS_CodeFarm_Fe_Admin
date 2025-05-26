@@ -49,8 +49,8 @@ const AdminSidebar = () => {
       label: 'Quản lý thương hiệu',
       icon: <FolderOutlined />,
       children: [
-        { key: 'categorieslist', label: 'Danh sách thương hiệu' },
-        { key: 'categoriesadd', label: 'Thêm thương hiệu' },
+        { key: 'brandslist', label: 'Danh sách thương hiệu' },
+        { key: 'brandsadd', label: 'Thêm thương hiệu' },
       ],
     },
     {
@@ -67,6 +67,18 @@ const AdminSidebar = () => {
         break;
       case 'productadd':
         navigate('/products/add');
+        break;
+      case 'categorieslist':
+        navigate('/categories');
+        break;
+      case 'categoriesadd':
+        navigate('/categories/add');
+        break;
+      case 'brandslist':
+        navigate('/brands');
+        break;
+      case 'brandsadd':
+        navigate('/brands/add');
         break;
       default:
         navigate('/');

@@ -7,3 +7,22 @@ export interface IUser {
 }
 export type UserRegister = Omit<IUser,"id">
 export type UserLogin = Pick<IUser,"email"|"password">
+
+//////////////////
+export interface Category {
+  _id: string; 
+  name: string;
+  description?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+//////////////////
+export interface Brand {
+  _id: string;          
+  name: string;
+  origin?: string;
+  logo?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
