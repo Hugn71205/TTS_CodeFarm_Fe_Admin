@@ -7,6 +7,9 @@ import {
   ProductFilled,
   LeftOutlined,
   RightOutlined,
+  ShoppingCartOutlined,
+  UserOutlined,
+  StarOutlined,
 } from '@ant-design/icons';
 import { Menu } from 'antd';
 import type { MenuProps } from 'antd';
@@ -49,9 +52,24 @@ const AdminSidebar = () => {
       label: 'Quản lý thương hiệu',
       icon: <FolderOutlined />,
       children: [
-        { key: 'categorieslist', label: 'Danh sách thương hiệu' },
-        { key: 'categoriesadd', label: 'Thêm thương hiệu' },
+        { key: 'brandslist', label: 'Danh sách thương hiệu' },
+        { key: 'brandsadd', label: 'Thêm thương hiệu' },
       ],
+    },
+    {
+      key: 'orderslist',
+      label: 'Quản lý đơn hàng',
+      icon: <ShoppingCartOutlined />,
+    },
+    {
+      key: 'Customers',
+      label: 'Quản lý khách hàng',
+      icon: <UserOutlined />,
+    },
+    {
+      key: 'Reviews',
+      label: 'Quản lý bình luận',
+      icon: <StarOutlined />,
     },
     {
       key: 'report',
@@ -68,6 +86,28 @@ const AdminSidebar = () => {
       case 'productadd':
         navigate('/products/add');
         break;
+      case 'categorieslist':
+        navigate('/categories');
+        break;
+      case 'categoriesadd':
+        navigate('/categories/add');
+        break;
+      case 'brandslist':
+        navigate('/brands');
+        break;
+      case 'brandsadd':
+        navigate('/brands/add');
+        break;
+      case 'orderslist':
+        navigate('/orders');
+        break;
+      case 'Customers':
+        navigate('/customers');
+        break;
+      case 'Reviews':
+        navigate('/reviews');
+        break;
+
       default:
         navigate('/');
         break;
