@@ -7,6 +7,9 @@ import {
   ProductFilled,
   LeftOutlined,
   RightOutlined,
+  ShoppingCartOutlined,
+  UserOutlined,
+  StarOutlined,
 } from '@ant-design/icons';
 import { Menu } from 'antd';
 import type { MenuProps } from 'antd';
@@ -54,6 +57,21 @@ const AdminSidebar = () => {
       ],
     },
     {
+      key: 'orderslist',
+      label: 'Quản lý đơn hàng',
+      icon: <ShoppingCartOutlined />,
+    },
+    {
+      key: 'Customers',
+      label: 'Quản lý khách hàng',
+      icon: <UserOutlined />,
+    },
+    {
+      key: 'Reviews',
+      label: 'Quản lý bình luận',
+      icon: <StarOutlined />,
+    },
+    {
       key: 'report',
       label: 'Thống kê',
       icon: <FileTextFilled />,
@@ -80,6 +98,16 @@ const AdminSidebar = () => {
       case 'brandsadd':
         navigate('/brands/add');
         break;
+      case 'orderslist':
+        navigate('/orders');
+        break;
+      case 'Customers':
+        navigate('/customers');
+        break;
+      case 'Reviews':
+        navigate('/reviews');
+        break;
+
       default:
         navigate('/');
         break;

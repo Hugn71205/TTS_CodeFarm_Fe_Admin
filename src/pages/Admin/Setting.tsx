@@ -1,6 +1,8 @@
 import React from 'react'
 
-const Setting = () => {
+type Props = {}
+
+const Setting = (props: Props) => {
   return (
     <div>Setting</div>
   )
