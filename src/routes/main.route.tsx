@@ -22,7 +22,6 @@ export const router = createBrowserRouter([
     path: "/",
     element: <AdminLayout />,
     children: [
-      {index: true, element: <Home/>},
       {path: '/products', element: <Product/>},
       {path: '/products/add', element: <AddProduct/>},
       {path: '/categories', element: <Categories/>},
