@@ -1,16 +1,21 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from 'react';
 import { Form, Input, Button, message } from 'antd';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const AddCategories: React.FC = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate()
 
   const onFinish = async (values: any) => {
     setLoading(true);
     try {
       await axios.post('http://localhost:8888/categories', values);
       message.success('Thêm Danh mục thành công');
+      navigate('/categories')
       form.resetFields();
     } catch (error) {
       message.error('Thêm Danh mục thất bại');

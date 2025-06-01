@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import { Table, Spin, message, Popconfirm, Button,Image } from 'antd';
 import axios from 'axios';
@@ -13,7 +15,7 @@ const Brands: React.FC = () => {
   const fetchBrands = async () => {
     setLoading(true);
     try {
-      const response = await axios.get('http://localhost:8888/brands');
+      const response = await axios.get('http://localhost:8888/brands/');
       const data = response.data?.data?.data || [];
       setBrands(data);
     } catch (error) {
@@ -31,7 +33,7 @@ const Brands: React.FC = () => {
     try {
       await axios.delete(`http://localhost:8888/brands/${id}`);
       message.success('Xóa danh mục thành công');
-      fetchBrands(); // gọi lại để load lại danh sách
+      fetchBrands();
     } catch (error) {
       message.error('Xóa danh mục thất bại');
     }
@@ -46,7 +48,7 @@ const Brands: React.FC = () => {
     render: (_: any, __: any, index: number) => index + 1,
   },
     {
-      title: 'Tên danh mục',
+      title: 'Tên thương hiệu',
       dataIndex: 'name',
       key: 'name',
       width: 200,
@@ -58,7 +60,7 @@ const Brands: React.FC = () => {
       ellipsis: true,
     },
     {
-      title: 'LoGO',
+      title: 'Logo',
       dataIndex: 'logo',
       key: 'logo',
        render: (url:string) =>

@@ -1,6 +1,5 @@
 import { createBrowserRouter } from "react-router-dom"
 import AdminLayout from "../components/layouts/AdminLayout"
-import { Home } from "lucide-react"
 import Product from "../pages/Admin/Product"
 
 import Categories from "../pages/Admin/Categories"
@@ -31,8 +30,8 @@ export const router = createBrowserRouter([
       {path: '/orders', element: <Orders/>},
       {path: '/customers', element: <Customers/>},
       {path: '/reviews', element: <Reviews/>},
-      {path: 'products/update/:id', element: <UpdateProduct/>},
-      {path: 'categories/update/:id', element: <UpdateCategories/>},
+      {path: '/products/update/:id', element: <UpdateProduct/>},
+      {path: '/categories/update/:id', element: <UpdateCategories/>},
       {path: '/brands/update/:id', element: <UpdateBrand/>},
     ],
   }

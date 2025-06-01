@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from 'react';
 import { Table, Button, message, Tag, Card, Popconfirm } from 'antd';
 import dayjs from 'dayjs';
@@ -73,14 +75,21 @@ const Customers = () => {
     },
     {
       title: 'SĐT',
-      dataIndex: 'sdt',
-      key: 'sdt',
-      render: (sdt: string | undefined) =>
-        sdt ? sdt : <span style={{ color: '#999', fontStyle: 'italic' }}>Chưa có</span>,
+      dataIndex: 'phone',
+      key: 'phone',
+      render: (phone: string | undefined) =>
+        phone ? phone : <span style={{ color: '#999', fontStyle: 'italic' }}>Chưa có</span>,
+    },
+    {
+      title: 'Địa chỉ',
+      dataIndex: 'address',
+      key: 'address',
+      render: (address: string | undefined) =>
+        address ? address : <span style={{ color: '#999', fontStyle: 'italic' }}>Chưa có</span>,
     },
     {
       title: 'Vai trò',
-      dataIndex: 'isAdmin',
+      dataIndex: 'role',
       key: 'role',
       filters: [
         { text: 'Admin', value: true },

@@ -7,6 +7,8 @@ import {
   ProductFilled,
   LeftOutlined,
   RightOutlined,
+  UserOutlined,
+  InboxOutlined,
 } from "@ant-design/icons";
 import { Menu } from "antd";
 import type { MenuProps } from "antd";
@@ -55,6 +57,24 @@ const AdminSidebar = () => {
       ],
     },
     {
+      key: "customers",
+      label: "Quản lý người dùng",
+      icon: <UserOutlined />,
+      children: [
+        { key: "customerslist", label: "Danh sách người dùng" },
+        { key: "customersadd", label: "Thêm người dùng" },
+      ],
+    },
+    {
+      key: "orders",
+      label: "Quản lý đơn hàng",
+      icon: <InboxOutlined />,
+      children: [
+        { key: "orderslist", label: "Danh sách đơn hàng" },
+        { key: "ordersadd", label: "Thêm đơn hàng" },
+      ],
+    },
+    {
       key: "report",
       label: "Thống kê",
       icon: <FileTextFilled />,
@@ -68,6 +88,24 @@ const AdminSidebar = () => {
         break;
       case "productadd":
         navigate("/products/add");
+        break;
+      case "categorieslist":
+        navigate("/categories");
+        break;
+      case "categoriesadd":
+        navigate("/categories/add");
+        break;
+      case "brandslist":
+        navigate("/brands");
+        break;
+      case "brandsadd":
+        navigate("/brands/add");
+        break;
+      case "customerslist":
+        navigate("/customers");
+        break;
+      case "orderslist":
+        navigate("/orders");
         break;
       default:
         navigate("/");

@@ -1,16 +1,21 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from 'react';
 import { Form, Input, Button, message } from 'antd';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const AddBrand: React.FC = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate()
 
   const onFinish = async (values: any) => {
     setLoading(true);
     try {
-      await axios.post('http://localhost:8888/brands', values);
+      await axios.post('http://localhost:8888/brands/', values);
       message.success('Thêm thương hiệu thành công');
+      navigate('/brands') 
       form.resetFields();
     } catch (error) {
       message.error('Thêm thương hiệu thất bại');
@@ -30,11 +35,17 @@ const AddBrand: React.FC = () => {
           <Input placeholder="Nhập tên thương hiệu" />
         </Form.Item>
 
+        <Form.Item
+          label="Xuất xứ"
+          name="origin"
+          rules={[{ required: true, message: 'Vui lòng nhập xuất xứ' }]}
+        >
+          <Input placeholder="Nhập xuất xứ của thương hiệu" />
+        </Form.Item>
+
         <Form.Item label="Logo (URL)" name="logo">
           <Input placeholder="Nhập URL logo" />
         </Form.Item>
-
-        
 
         <Form.Item>
           <Button type="primary" htmlType="submit" loading={loading}>

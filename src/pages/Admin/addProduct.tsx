@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { useEffect, useState } from 'react';
 import { Form, Input, Button, Select, message } from 'antd';
 import axios from 'axios';
 import type { Brand, Category } from '../../interface/type';
+import { useNavigate } from 'react-router-dom';
 
 const { Option } = Select;
 
@@ -10,8 +13,8 @@ const AddProduct = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [brands, setBrands] = useState<Brand[]>([]);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate()
 
-  // Lấy danh mục và thương hiệu để chọn
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -19,8 +22,8 @@ const AddProduct = () => {
           axios.get('http://localhost:8888/categories'),
           axios.get('http://localhost:8888/brands'),
         ]);
-        setCategories(catRes.data.data?.data || []); // lấy đúng mảng categories
-      setBrands(brandRes.data.data?.data || []);   // lấy đúng mảng brands
+        setCategories(catRes.data.data?.data || []);
+      setBrands(brandRes.data.data?.data || []);
       } catch (error) {
         message.error('Lấy danh mục hoặc thương hiệu thất bại');
       }
@@ -33,6 +36,7 @@ const AddProduct = () => {
     try {
       await axios.post('http://localhost:8888/products', values);
       message.success('Thêm sản phẩm thành công');
+      navigate('/products')
       form.resetFields();
     } catch (error) {
       message.error('Thêm sản phẩm thất bại');
