@@ -15,6 +15,7 @@ import AddBrand from "../pages/Admin/AddBrands"
 import UpdateProduct from "../pages/Admin/UpdateProduct"
 import UpdateCategories from "../pages/Admin/UpdateCategories"
 import UpdateBrand from "../pages/Admin/UpdateBrand"
+import OrderItemsPage from "../pages/Admin/OrderItem"
 
 export const router = createBrowserRouter([
   {
@@ -33,6 +34,7 @@ export const router = createBrowserRouter([
       {path: '/products/update/:id', element: <UpdateProduct/>},
       {path: '/categories/update/:id', element: <UpdateCategories/>},
       {path: '/brands/update/:id', element: <UpdateBrand/>},
+      {path: '/orders-item/order/:orderId', element: <OrderItemsPage/>},
     ],
   }
 ])
