@@ -1,6 +1,11 @@
 import { createBrowserRouter } from "react-router-dom"
 import AdminLayout from "../components/layouts/AdminLayout"
-import MainLayout from "../components/layouts/MainLayout"
+import OrderItemsPage from "../pages/Admin/OrderItem"
+import Variant from "../pages/Variants/Variant"
+import AddVariant from "../pages/Variants/addVariant"
+import UpdateVolumes from "../pages/Volumes/UpdateVolumes"
+import Volumes from "../pages/Volumes/Volumes"
+import AddVolumes from "../pages/Volumes/addVolumes"
 import AddBrand from "../pages/Brands/AddBrands"
 import Brands from "../pages/Brands/Brands"
 import UpdateBrand from "../pages/Brands/UpdateBrand"
@@ -8,18 +13,11 @@ import AddCategories from "../pages/Categories/AddCategories"
 import Categories from "../pages/Categories/Categories"
 import UpdateCategories from "../pages/Categories/UpdateCategories"
 import Customers from "../pages/Customers/Customers"
-import LoginPage from "../pages/Login/LoginPage"
 import Orders from "../pages/Orders/Orders"
-import AddProduct from "../pages/Products/addProduct"
 import Product from "../pages/Products/Product"
 import UpdateProduct from "../pages/Products/UpdateProduct"
+import AddProduct from "../pages/Products/addProduct"
 import Reviews from "../pages/Reviews/Reviews"
-import SignUpPage from "../pages/SignUp/SignUpPage"
-import Variant from "../pages/Variants/Variant"
-import AddVariant from "../pages/Variants/addVariant"
-import Volumes from "../pages/Volumes/Volumes"
-import AddVolumes from "../pages/Volumes/addVolumes"
-import UpdateVolumes from "../pages/Volumes/UpdateVolumes"
 
 export const router = createBrowserRouter([
   {
@@ -43,14 +41,7 @@ export const router = createBrowserRouter([
       {path: '/volumes/update/:id', element: <UpdateVolumes/>},
       {path: '/categories/update/:id', element: <UpdateCategories/>},
       {path: '/brands/update/:id', element: <UpdateBrand/>},
-    ],
-  },
-  {
-    path: "/",
-    element: <MainLayout />,
-    children: [
-      {path: '/register', element: <SignUpPage/>},
-      {path: '/login', element: <LoginPage/>},
+      {path: '/orders-item/order/:orderId', element: <OrderItemsPage/>},
     ],
   }
 ])

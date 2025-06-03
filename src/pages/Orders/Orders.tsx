@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { Table, Tag, Card, message, Select, Space } from "antd";
-import axios from "axios";
+import React, { useEffect, useState } from 'react';
+import { Table, Tag, Card, message, Select, Space } from 'antd';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const { Option } = Select;
 
@@ -32,6 +33,7 @@ interface Order {
 const Orders = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const fetchOrders = async () => {
     setLoading(true);
@@ -180,12 +182,31 @@ const Orders = () => {
       dataIndex: "createdAt",
       key: "createdAt",
       render: (date: string) =>
-        new Date(date).toLocaleDateString("vi-VN", {
-          day: "2-digit",
-          month: "2-digit",
-          year: "numeric",
+        new Date(date).toLocaleDateString('vi-VN', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
         }),
     },
+    {
+    title: 'Actions',
+    key: 'actions',
+    render: (_: any, record: Order) => (
+      <button
+        onClick={() => navigate(`/orders-item/order/${record._id}`)}
+        style={{
+          padding: '4px 8px',
+          backgroundColor: '#1890ff',
+          color: 'white',
+          border: 'none',
+          borderRadius: 4,
+          cursor: 'pointer',
+        }}
+      >
+        Xem chi tiết
+      </button>
+    ),
+  },
   ];
 
   return (
