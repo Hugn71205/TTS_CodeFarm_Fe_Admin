@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from 'react';
 import { Button, Input, message, Form, Spin } from 'antd';
 import axios from 'axios';

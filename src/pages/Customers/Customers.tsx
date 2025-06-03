@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Table, Button, message, Tag, Card, Popconfirm } from 'antd';
 import dayjs from 'dayjs';
 import { axiosInstance } from '../../utils/axios.util';
@@ -23,7 +23,7 @@ const Customers = () => {
   const fetchUsers = async () => {
     setLoading(true);
     try {
-      const res = await axiosInstance.get('auth/list');
+      const res = await axiosInstance.get('auth/');
       setUsers(res.data || []);
     } catch (error) {
       message.error('Không thể tải danh sách người dùng');

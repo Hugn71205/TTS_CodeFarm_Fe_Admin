@@ -1,19 +1,21 @@
 import { useState } from "react";
 import {
-  BarsOutlined,
   DashboardFilled,
   FileTextFilled,
-  FolderOutlined,
   ProductFilled,
   LeftOutlined,
   RightOutlined,
-  UserOutlined,
-  InboxOutlined,
+  FilterFilled,
+  FolderFilled,
+  SwitcherFilled,
+  TruckFilled,
+  DatabaseFilled,
 } from "@ant-design/icons";
 import { Menu } from "antd";
 import type { MenuProps } from "antd";
 import { useNavigate } from "react-router-dom";
 import logo from '../../assets/th-removebg-preview - Copy.png'
+import { TbUserFilled } from "react-icons/tb";
 
 const AdminSidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -39,9 +41,27 @@ const AdminSidebar = () => {
       ],
     },
     {
+      key: "volumes",
+      label: "Quản lý dung tích",
+      icon: <FilterFilled />,
+      children: [
+        { key: "volumelist", label: "Danh sách dung tích" },
+        { key: "volumeadd", label: "Thêm dung tích" },
+      ],
+    },
+    {
+      key: "variants",
+      label: "Quản lý biến thể",
+      icon: <SwitcherFilled />,
+      children: [
+        { key: "variantlist", label: "Danh sách biến thể" },
+        { key: "variantadd", label: "Thêm biến thể" },
+      ],
+    },
+    {
       key: "categories",
       label: "Quản lý danh mục",
-      icon: <BarsOutlined />,
+      icon: <DatabaseFilled />,
       children: [
         { key: "categorieslist", label: "Danh sách danh mục" },
         { key: "categoriesadd", label: "Thêm danh mục" },
@@ -50,7 +70,7 @@ const AdminSidebar = () => {
     {
       key: "brands",
       label: "Quản lý thương hiệu",
-      icon: <FolderOutlined />,
+      icon: <FolderFilled />,
       children: [
         { key: "brandslist", label: "Danh sách thương hiệu" },
         { key: "brandsadd", label: "Thêm thương hiệu" },
@@ -59,7 +79,7 @@ const AdminSidebar = () => {
     {
       key: "customers",
       label: "Quản lý người dùng",
-      icon: <UserOutlined />,
+      icon: <TbUserFilled />,
       children: [
         { key: "customerslist", label: "Danh sách người dùng" },
         { key: "customersadd", label: "Thêm người dùng" },
@@ -68,7 +88,7 @@ const AdminSidebar = () => {
     {
       key: "orders",
       label: "Quản lý đơn hàng",
-      icon: <InboxOutlined />,
+      icon: <TruckFilled />,
       children: [
         { key: "orderslist", label: "Danh sách đơn hàng" },
         { key: "ordersadd", label: "Thêm đơn hàng" },
@@ -88,6 +108,18 @@ const AdminSidebar = () => {
         break;
       case "productadd":
         navigate("/products/add");
+        break;
+      case "variantlist":
+        navigate("/variants");
+        break;
+      case "variantadd":
+        navigate("/variants/add");
+        break;
+      case "volumelist":
+        navigate("/volumes");
+        break;
+      case "volumeadd":
+        navigate("/volumes/add");
         break;
       case "categorieslist":
         navigate("/categories");

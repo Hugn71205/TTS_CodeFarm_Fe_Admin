@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { Table, Tag, Card, message, Select, Space } from 'antd';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import { Table, Tag, Card, message, Select, Space } from "antd";
+import axios from "axios";
 
 const { Option } = Select;
 
@@ -36,12 +36,12 @@ const Orders = () => {
   const fetchOrders = async () => {
     setLoading(true);
     try {
-      const res = await axios.get('http://localhost:8888/orders');
+      const res = await axios.get("http://localhost:8888/orders");
       const data = res.data?.data?.orders || [];
       setOrders(data);
     } catch (error) {
-      console.error('Lỗi tải đơn hàng:', error);
-      message.error('Không thể tải danh sách đơn hàng');
+      console.error("Lỗi tải đơn hàng:", error);
+      message.error("Không thể tải danh sách đơn hàng");
     } finally {
       setLoading(false);
     }
@@ -54,76 +54,89 @@ const Orders = () => {
   const handleStatusChange = async (orderId: string, status: string) => {
     try {
       await axios.patch(`http://localhost:8888/orders/${orderId}`, { status });
-      message.success('Cập nhật trạng thái thành công');
+      message.success("Cập nhật trạng thái thành công");
       fetchOrders();
     } catch (err) {
       console.error(err);
-      message.error('Cập nhật trạng thái thất bại');
+      message.error("Cập nhật trạng thái thất bại");
     }
   };
 
   const statusOptions = [
-    'pending',
-    'confirmed',
-    'out for delivery',
-    'delivered',
-    'done',
-    'canceled',
+    "pending",
+    "confirmed",
+    "out for delivery",
+    "delivered",
+    "done",
+    "canceled",
   ];
 
-  const paymentMethods = Array.from(new Set(orders.map(o => o.payment_method)));
+  const paymentMethods = Array.from(
+    new Set(orders.map((o) => o.payment_method))
+  );
 
   const columns = [
     {
-      title: 'Khách hàng',
-      dataIndex: ['customer_info', 'username'],
-      key: 'customer',
-      filters: Array.from(new Set(orders.map(o => o.customer_info.username))).map(name => ({
+      title: "Khách hàng",
+      dataIndex: ["customer_info", "username"],
+      key: "customer",
+      filters: Array.from(
+        new Set(orders.map((o) => o.customer_info.username))
+      ).map((name) => ({
         text: name,
         value: name,
       })),
       onFilter: (value, record) =>
-        record.customer_info.username.toLowerCase().includes((value as string).toLowerCase()),
+        record.customer_info.username
+          .toLowerCase()
+          .includes((value as string).toLowerCase()),
     },
     {
-      title: 'Người nhận',
-      dataIndex: ['receiver_info', 'username'],
-      key: 'receiver',
-      filters: Array.from(new Set(orders.map(o => o.receiver_info.username))).map(name => ({
+      title: "Người nhận",
+      dataIndex: ["receiver_info", "username"],
+      key: "receiver",
+      filters: Array.from(
+        new Set(orders.map((o) => o.receiver_info.username))
+      ).map((name) => ({
         text: name,
         value: name,
       })),
       onFilter: (value, record) =>
-        record.receiver_info.username.toLowerCase().includes((value as string).toLowerCase()),
+        record.receiver_info.username
+          .toLowerCase()
+          .includes((value as string).toLowerCase()),
     },
     {
-      title: 'SĐT người nhận',
-      dataIndex: ['receiver_info', 'phone_number'],
-      key: 'receiver_phone',
+      title: "SĐT người nhận",
+      dataIndex: ["receiver_info", "phone_number"],
+      key: "receiver_phone",
     },
     {
-      title: 'Tổng tiền',
-      dataIndex: 'total_amount',
-      key: 'total_amount',
+      title: "Tổng tiền",
+      dataIndex: "total_amount",
+      key: "total_amount",
       render: (amount: number) => `${amount.toLocaleString()}₫`,
     },
     {
-      title: 'Phí ship',
-      dataIndex: 'shipping_fee',
-      key: 'shipping_fee',
+      title: "Phí ship",
+      dataIndex: "shipping_fee",
+      key: "shipping_fee",
       render: (fee: number) => `${fee.toLocaleString()}₫`,
     },
     {
-      title: 'Phương thức thanh toán',
-      dataIndex: 'payment_method',
-      key: 'payment_method',
+      title: "Phương thức thanh toán",
+      dataIndex: "payment_method",
+      key: "payment_method",
       render: (method: string) => method.toUpperCase(),
-      filters: paymentMethods.map(method => ({ text: method.toUpperCase(), value: method })),
+      filters: paymentMethods.map((method) => ({
+        text: method.toUpperCase(),
+        value: method,
+      })),
       onFilter: (value, record) => record.payment_method === value,
     },
     {
-      title: 'Trạng thái đơn hàng',
-      key: 'status',
+      title: "Trạng thái đơn hàng",
+      key: "status",
       render: (_: any, record: Order) => (
         <Select
           size="small"
@@ -138,34 +151,39 @@ const Orders = () => {
           ))}
         </Select>
       ),
-      filters: statusOptions.map(status => ({ text: status.toUpperCase(), value: status })),
+      filters: statusOptions.map((status) => ({
+        text: status.toUpperCase(),
+        value: status,
+      })),
       onFilter: (value, record) => record.status === value,
     },
     {
-      title: 'Ghi chú',
-      dataIndex: 'user_note',
-      key: 'user_note',
+      title: "Ghi chú",
+      dataIndex: "user_note",
+      key: "user_note",
     },
     {
-      title: 'Người hủy',
-      dataIndex: 'cancel_by',
-      key: 'cancel_by',
-      render: (val: string) => val?.toUpperCase() || '-',
-      filters: Array.from(new Set(orders.map(o => o.cancel_by).filter(Boolean))).map(val => ({
+      title: "Người hủy",
+      dataIndex: "cancel_by",
+      key: "cancel_by",
+      render: (val: string) => val?.toUpperCase() || "-",
+      filters: Array.from(
+        new Set(orders.map((o) => o.cancel_by).filter(Boolean))
+      ).map((val) => ({
         text: val.toUpperCase(),
         value: val,
       })),
       onFilter: (value, record) => record.cancel_by === value,
     },
     {
-      title: 'Ngày tạo',
-      dataIndex: 'createdAt',
-      key: 'createdAt',
+      title: "Ngày tạo",
+      dataIndex: "createdAt",
+      key: "createdAt",
       render: (date: string) =>
-        new Date(date).toLocaleDateString('vi-VN', {
-          day: '2-digit',
-          month: '2-digit',
-          year: 'numeric',
+        new Date(date).toLocaleDateString("vi-VN", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
         }),
     },
   ];
@@ -174,7 +192,11 @@ const Orders = () => {
     <Card
       title="Danh sách đơn hàng"
       variant="plain"
-      style={{ margin: 24, borderRadius: 8, boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}
+      style={{
+        margin: 24,
+        borderRadius: 8,
+        boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+      }}
     >
       <Table
         rowKey="_id"

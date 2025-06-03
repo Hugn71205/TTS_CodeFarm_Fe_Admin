@@ -98,7 +98,7 @@ const Categories: React.FC = () => {
             Sửa
           </Button>
           <Popconfirm
-            title="Bạn có chắc chắn muốn xóa sản phẩm này?"
+            title="Bạn có chắc chắn muốn xóa danh mục này?"
             onConfirm={() => handleDelete(record._id)}
             okText="Có"
             cancelText="Không"
