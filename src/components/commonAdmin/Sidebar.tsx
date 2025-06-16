@@ -77,6 +77,15 @@ const AdminSidebar = () => {
       ],
     },
     {
+      key: "coupons",
+      label: "Quản lý mã giảm giá",
+      icon:<FolderFilled/>,
+      children: [
+        { key: "couponlist", label: "Danh sách mã giảm giá" },
+        { key: "couponadd", label: "Thêm mã giảm giá" },
+      ],
+    },
+    {
       key: "customers",
       label: "Quản lý người dùng",
       icon: <TbUserFilled />,
@@ -132,6 +141,12 @@ const AdminSidebar = () => {
         break;
       case "brandsadd":
         navigate("/brands/add");
+        break;
+      case "couponlist":
+        navigate("/coupons");
+        break;
+      case "couponadd":
+        navigate("/coupons/add");
         break;
       case "customerslist":
         navigate("/customers");

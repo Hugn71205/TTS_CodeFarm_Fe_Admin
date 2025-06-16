@@ -13,7 +13,7 @@ const AddBrand: React.FC = () => {
   const onFinish = async (values: any) => {
     setLoading(true);
     try {
-      await axios.post('http://localhost:8888/brands/', values);
+      await axios.post('http://localhost:3000/api/brands/', values);
       message.success('Thêm thương hiệu thành công');
       navigate('/brands') 
       form.resetFields();

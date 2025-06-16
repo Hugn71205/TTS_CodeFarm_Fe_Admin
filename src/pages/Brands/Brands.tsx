@@ -15,8 +15,8 @@ const Brands: React.FC = () => {
   const fetchBrands = async () => {
     setLoading(true);
     try {
-      const response = await axios.get('http://localhost:8888/brands/');
-      const data = response.data?.data?.data || [];
+      const response = await axios.get('http://localhost:3000/api/brands');
+      const data = response.data || [];
       setBrands(data);
     } catch (error) {
       message.error('Lấy danh sách danh mục thất bại');
@@ -31,8 +31,8 @@ const Brands: React.FC = () => {
   const handleDelete = async (id: string) => {
     setDeletingId(id);
     try {
-      await axios.delete(`http://localhost:8888/brands/${id}`);
-      message.success('Xóa danh mục thành công');
+      await axios.delete(`http://localhost:3000/api/brands/${id}`);
+      message.success('Xóa thương hiệu thành công');
       fetchBrands();
     } catch (error) {
       message.error('Xóa danh mục thất bại');

@@ -14,7 +14,7 @@ const Product = () => {
 const fetchProducts = async () => {
   setLoading(true);
   try {
-    const response = await axios.get('http://localhost:8888/products');
+    const response = await axios.get('http://localhost:3000/products');
     const productsArray = response.data?.data?.data || []; // lấy đúng mảng sản phẩm
     setProducts(productsArray);
   } catch (error) {

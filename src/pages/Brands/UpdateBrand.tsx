@@ -16,7 +16,7 @@ const UpdateBrand: React.FC = () => {
     setLoadingBrand(true);
     try {
       const res = await axiosInstance.get(`brands/${id}`);
-      const brand = res.data?.data?.data;
+      const brand = res.data;
       form.setFieldsValue({
         name: brand.name,
         origin: brand.origin,
@@ -38,7 +38,7 @@ const UpdateBrand: React.FC = () => {
   const onFinish = async (values: any) => {
     setLoading(true);
     try {
-      await axios.put(`http://localhost:8888/brands/${id}`, values);
+      await axiosInstance.put(`/brands/${id}`, values);
       message.success("Cập nhật thương hiệu thành công");
       navigate("/brands");
     } catch {

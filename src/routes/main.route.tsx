@@ -18,6 +18,8 @@ import Product from "../pages/Products/Product"
 import UpdateProduct from "../pages/Products/UpdateProduct"
 import AddProduct from "../pages/Products/addProduct"
 import Reviews from "../pages/Reviews/Reviews"
+import CouponList from "../pages/Coupons/CouponList"
+import CouponForm from "../pages/Coupons/CouponForm"
 
 export const router = createBrowserRouter([
   {
@@ -42,6 +44,10 @@ export const router = createBrowserRouter([
       {path: '/categories/update/:id', element: <UpdateCategories/>},
       {path: '/brands/update/:id', element: <UpdateBrand/>},
       {path: '/orders-item/order/:orderId', element: <OrderItemsPage/>},
+      {path: '/coupons', element: <CouponList/>},
+      {path: '/coupons/add', element: <CouponForm/>},
+      {path: '/coupons/edit/:id', element: <CouponForm/>},
+
     ],
   }
 ])
