@@ -16,6 +16,7 @@ import {
 } from 'antd';
 import axios from 'axios';
 import type { Brand } from '../../interface/type';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
 const Brands: React.FC = () => {
   const [brands, setBrands] = useState<Brand[]>([]);
@@ -135,18 +136,14 @@ const Brands: React.FC = () => {
       key: 'action',
       render: (record: Brand) => (
         <>
-          <Button type="link" onClick={() => openModalToEdit(record)} style={{ marginRight: 8 }}>
-            Sửa
-          </Button>
+          <Button icon={<EditOutlined />} type="link" onClick={() => openModalToEdit(record)} style={{ marginRight: 8 }}/>
           <Popconfirm
             title="Bạn có chắc chắn muốn xóa thương hiệu này?"
             onConfirm={() => handleDelete(record._id)}
             okText="Có"
             cancelText="Không"
           >
-            <Button type="link" danger loading={deletingId === record._id}>
-              Xóa
-            </Button>
+            <Button icon={<DeleteOutlined />} type="link" danger loading={deletingId === record._id}/>
           </Popconfirm>
         </>
       ),

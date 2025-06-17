@@ -1,7 +1,6 @@
 import { createBrowserRouter } from "react-router-dom"
 import AdminLayout from "../components/layouts/AdminLayout"
 import OrderItemsPage from "../pages/Admin/OrderItem"
-import Variant from "../pages/Variants/Variant"
 import Volumes from "../pages/Volumes/Volumes"
 import Brands from "../pages/Brands/Brands"
 import Categories from "../pages/Categories/Categories"
@@ -11,6 +10,7 @@ import Product from "../pages/Products/Product"
 import Reviews from "../pages/Reviews/Reviews"
 import AddProduct from "../pages/Products/addProduct"
 import UpdateProduct from "../pages/Products/UpdateProduct"
+import Variant from "../pages/Variants/Variant"
 
 export const router = createBrowserRouter([
   {

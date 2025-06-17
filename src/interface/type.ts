@@ -28,6 +28,27 @@ export interface Brand {
   updatedAt?: string;
 }
 
+export interface Product {
+  _id: string;          
+  name: string;
+  image?: string;
+  gender?: string;
+  description?: string;
+  category_id?: string;
+  brand_id?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface Variant {
+  _id: string;          
+  product_id?: string;
+  volume_id?: string;
+  price?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 export interface Volume {
   _id: string; 
   size: string;

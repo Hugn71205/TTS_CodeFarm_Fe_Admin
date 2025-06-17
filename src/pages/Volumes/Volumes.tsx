@@ -12,6 +12,7 @@ import {
 } from 'antd';
 import axios from 'axios';
 import type { Volume } from '../../interface/type';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
 const Volumes: React.FC = () => {
   const [volumes, setVolumes] = useState<Volume[]>([]);
@@ -110,18 +111,14 @@ const Volumes: React.FC = () => {
       key: 'actions',
       render: (record: Volume) => (
         <>
-          <Button type="link" onClick={() => openEditModal(record)}>
-            Sửa
-          </Button>
+          <Button type="link" onClick={() => openEditModal(record)} icon={<EditOutlined />} />
           <Popconfirm
             title="Bạn có chắc chắn muốn xóa?"
             onConfirm={() => handleDelete(record._id)}
             okText="Có"
             cancelText="Không"
           >
-            <Button type="link" danger loading={deletingId === record._id}>
-              Xóa
-            </Button>
+            <Button type="link" danger loading={deletingId === record._id} icon={<DeleteOutlined />} />
           </Popconfirm>
         </>
       ),
