@@ -13,6 +13,7 @@ import {
 } from 'antd';
 import axios from 'axios';
 import type { Category } from '../../interface/type';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
 const Categories: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -117,21 +118,18 @@ const Categories: React.FC = () => {
       render: (record: Category) => (
         <>
           <Button
+            icon={<EditOutlined />}
             type="link"
             onClick={() => handleOpenModal(record)}
             style={{ marginRight: 8 }}
-          >
-            Sửa
-          </Button>
+          />
           <Popconfirm
             title="Bạn có chắc chắn muốn xóa danh mục này?"
             onConfirm={() => handleDelete(record._id)}
             okText="Có"
             cancelText="Không"
           >
-            <Button type="link" danger loading={deletingId === record._id}>
-              Xóa
-            </Button>
+            <Button icon={<DeleteOutlined />} type="link" danger loading={deletingId === record._id}/>
           </Popconfirm>
         </>
       ),
@@ -140,7 +138,7 @@ const Categories: React.FC = () => {
 
   return (
     <div style={{ padding: 20 }}>
-      <div style={{ textAlign: 'right', marginBottom: 16 }}>
+      <div style={{ textAlign: 'left', marginBottom: 16 }}>
         <Button type="primary" onClick={() => handleOpenModal()}>
           Thêm danh mục
         </Button>

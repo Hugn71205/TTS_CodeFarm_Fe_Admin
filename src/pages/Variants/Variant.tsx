@@ -2,87 +2,88 @@
 import { useEffect, useState } from 'react';
 import {
   Table,
-  Image,
   Spin,
   message,
   Popconfirm,
   Button,
   Modal,
   Form,
-  Input,
   Select,
   Row,
   Col,
+  InputNumber,
 } from 'antd';
 import axios from 'axios';
-import type { Category, Brand } from '../../interface/type';
+import type { Product, Volume } from '../../interface/type';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
 
-const Variant = () => {
+ const Variant = () => {
   const [form] = Form.useForm();
-  const [products, setProducts] = useState<any[]>([]);
+  const [variants, setVariants] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const [editingProduct, setEditingProduct] = useState<any>(null);
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [brands, setBrands] = useState<Brand[]>([]);
+  const [editingVariant, setEditingVariant] = useState<any>(null);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [volumes, setVolumes] = useState<Volume[]>([]);
   const [modalLoading, setModalLoading] = useState(false);
 
-  const fetchProducts = async () => {
+  const fetchVariants = async () => {
     setLoading(true);
     try {
-      const response = await axios.get('http://localhost:8888/products');
-      setProducts(response.data?.data?.data || []);
+      const response = await axios.get('http://localhost:8888/variants');
+      setVariants(response.data || []);
     } catch {
-      message.error('Lấy dữ liệu sản phẩm thất bại');
+      message.error('Lấy dữ liệu biến thể sản phẩm thất bại');
     }
     setLoading(false);
   };
 
-  const fetchCategoryAndBrand = async () => {
+  const fetchVolumeAndProduct = async () => {
     try {
-      const [catRes, brandRes] = await Promise.all([
-        axios.get('http://localhost:8888/categories'),
-        axios.get('http://localhost:8888/brands'),
+      const [proRes, voluRes] = await Promise.all([
+        axios.get('http://localhost:8888/products'),
+        axios.get('http://localhost:8888/volumes'),
       ]);
-      setCategories(catRes.data?.data?.data || []);
-      setBrands(brandRes.data?.data?.data || []);
+      setProducts(proRes.data?.data?.data || proRes.data?.data || []);
+      setVolumes(voluRes.data || []);
     } catch {
-      message.error('Lấy danh mục hoặc thương hiệu thất bại');
+      message.error('Lấy sản phẩm hoặc dung tích thất bại');
     }
   };
 
   useEffect(() => {
-    fetchProducts();
-    fetchCategoryAndBrand();
+    fetchVariants();
+    fetchVolumeAndProduct();
   }, []);
 
   const handleDelete = async (id: string) => {
     setDeletingId(id);
     try {
-      await axios.delete(`http://localhost:8888/products/${id}`);
-      message.success('Xóa sản phẩm thành công');
-      fetchProducts();
+      await axios.delete(`http://localhost:8888/variants/${id}`);
+      message.success('Xóa biến thể thành công');
+      fetchVariants();
     } catch {
-      message.error('Xóa sản phẩm thất bại');
+      message.error('Xóa biến thể thất bại');
     }
     setDeletingId(null);
   };
 
   const handleEdit = (record: any) => {
-    setEditingProduct(record);
+    setEditingVariant(record);
     form.setFieldsValue({
       ...record,
-      category_id: record.category_id?._id || record.category_id,
-      brand_id: record.brand_id?._id || record.brand_id,
+      product_id: record.product_id?._id || record.product_id,
+      volume_id: record.volume_id?._id || record.volume_id,
+      price: parseFloat(record.price?.$numberDecimal || record.price || 0),
     });
     setModalVisible(true);
   };
 
   const handleAdd = () => {
-    setEditingProduct(null);
+    setEditingVariant(null);
     form.resetFields();
     setModalVisible(true);
   };
@@ -90,61 +91,66 @@ const Variant = () => {
   const handleModalFinish = async (values: any) => {
     setModalLoading(true);
     try {
-      if (editingProduct) {
-        await axios.put(`http://localhost:8888/products/${editingProduct._id}`, values);
-        message.success('Cập nhật sản phẩm thành công');
+      if (editingVariant) {
+        await axios.put(`http://localhost:8888/variants/${editingVariant._id}`, values);
+        message.success('Cập nhật biến thể thành công');
       } else {
-        await axios.post('http://localhost:8888/products', values);
-        message.success('Thêm sản phẩm thành công');
+        await axios.post('http://localhost:8888/variants', values);
+        message.success('Thêm biến thể thành công');
       }
       setModalVisible(false);
-      fetchProducts();
+      fetchVariants();
     } catch {
-      message.error(editingProduct ? 'Cập nhật thất bại' : 'Thêm thất bại');
+      message.error(editingVariant ? 'Cập nhật thất bại' : 'Thêm thất bại');
     }
     setModalLoading(false);
   };
 
   const columns = [
     {
-      title: 'Ảnh',
-      dataIndex: 'image',
-      render: (url: string) => (
-        <Image width={80} src={url || 'https://via.placeholder.com/80'} alt="product" />
-      ),
-    },
-    { title: 'Tên', dataIndex: 'name' },
-    { title: 'Giới tính', dataIndex: 'gender' },
-    {
-      title: 'Danh mục',
-      dataIndex: ['category_id', 'name'],
-      key: 'category',
+      title: 'Sản phẩm',
+      dataIndex: 'product_id',
+      render: (product: any) => product?.name || '---',
     },
     {
-      title: 'Thương hiệu',
-      dataIndex: ['brand_id', 'name'],
-      key: 'brand',
+    title: 'Dung tích',
+    dataIndex: 'volume_id',
+    render: (volume: any) => volume?.label || '---',
     },
-    { title: 'Mô tả', dataIndex: 'description', ellipsis: true },
+    {
+    title: 'Giá',
+    dataIndex: 'price',
+    render: (price: any) => {
+      const value = parseFloat(price?.$numberDecimal || 0);
+      return value.toLocaleString('vi-VN') + '₫';
+    },
+    },
     {
       title: 'Ngày tạo',
-      dataIndex: 'created_at',
-      render: (date: string) => new Date(date).toLocaleDateString(),
-      sorter: (a: any, b: any) =>
-        new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+      dataIndex: 'createdAt',
+      key: 'createdAt',
+      render: (date?: string) => (date ? new Date(date).toLocaleString() : '-'),
+      width: 180,
+    },
+    {
+      title: 'Ngày cập nhật',
+      dataIndex: 'updatedAt',
+      key: 'updatedAt',
+      render: (date?: string) => (date ? new Date(date).toLocaleString() : '-'),
+      width: 180,
     },
     {
       title: 'Hành động',
       render: (record: any) => (
         <>
-          <Button type="link" onClick={() => handleEdit(record)}>Sửa</Button>
+          <Button type="link" onClick={() => handleEdit(record)} icon={<EditOutlined />}/>
           <Popconfirm
-            title="Xác nhận xóa sản phẩm này?"
+            title="Xác nhận xóa biến thể này?"
             onConfirm={() => handleDelete(record._id)}
             okText="Có"
             cancelText="Không"
           >
-            <Button type="link" danger loading={deletingId === record._id}>Xóa</Button>
+            <Button type="link" danger loading={deletingId === record._id} icon={<DeleteOutlined />} />
           </Popconfirm>
         </>
       ),
@@ -154,16 +160,22 @@ const Variant = () => {
   return (
     <div style={{ padding: 20 }}>
       <Button type="primary" onClick={handleAdd} style={{ marginBottom: 16 }}>
-        Thêm sản phẩm
+        Thêm biến thể
       </Button>
+
       {loading ? (
         <Spin size="large" />
       ) : (
-        <Table rowKey="_id" columns={columns} dataSource={products} pagination={{ pageSize: 8 }} />
+        <Table
+          rowKey="_id"
+          columns={columns}
+          dataSource={variants}
+          pagination={{ pageSize: 8 }}
+        />
       )}
 
       <Modal
-        title={editingProduct ? 'Cập nhật sản phẩm' : 'Thêm sản phẩm'}
+        title={editingVariant ? 'Cập nhật biến thể' : 'Thêm biến thể'}
         open={modalVisible}
         onCancel={() => setModalVisible(false)}
         footer={null}
@@ -173,52 +185,19 @@ const Variant = () => {
           form={form}
           layout="vertical"
           onFinish={handleModalFinish}
-          initialValues={{ gender: 'Nam' }}
         >
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
-                label="Tên sản phẩm"
-                name="name"
-                rules={[{ required: true, message: 'Vui lòng nhập tên sản phẩm' }]}
+                label="Sản phẩm"
+                name="product_id"
+                rules={[{ required: true, message: 'Vui lòng chọn sản phẩm' }]}
               >
-                <Input />
-              </Form.Item>
-            </Col>
-
-            <Col span={12}>
-              <Form.Item
-                label="Giới tính"
-                name="gender"
-                rules={[{ required: true, message: 'Vui lòng chọn giới tính' }]}
-              >
-                <Select>
-                  <Option value="Nam">Nam</Option>
-                  <Option value="Nữ">Nữ</Option>
-                  <Option value="Unisex">Unisex</Option>
-                </Select>
-              </Form.Item>
-            </Col>
-          </Row>
-
-          <Form.Item label="Link ảnh" name="image">
-            <Input />
-          </Form.Item>
-
-          <Form.Item label="Mô tả" name="description">
-            <Input.TextArea rows={4} />
-          </Form.Item>
-
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item
-                label="Danh mục"
-                name="category_id"
-                rules={[{ required: true, message: 'Vui lòng chọn danh mục' }]}
-              >
-                <Select>
-                  {categories.map((cat) => (
-                    <Option key={cat._id} value={cat._id}>{cat.name}</Option>
+                <Select placeholder="Chọn sản phẩm">
+                  {products.map((product) => (
+                    <Option key={product._id} value={product._id}>
+                      {product.name}
+                    </Option>
                   ))}
                 </Select>
               </Form.Item>
@@ -226,22 +205,39 @@ const Variant = () => {
 
             <Col span={12}>
               <Form.Item
-                label="Thương hiệu"
-                name="brand_id"
-                rules={[{ required: true, message: 'Vui lòng chọn thương hiệu' }]}
+                label="Dung tích"
+                name="volume_id"
+                rules={[{ required: true, message: 'Vui lòng chọn dung tích' }]}
               >
-                <Select>
-                  {brands.map((brand) => (
-                    <Option key={brand._id} value={brand._id}>{brand.name}</Option>
+                <Select placeholder="Chọn dung tích">
+                  {volumes.map((volume) => (
+                    <Option key={volume._id} value={volume._id}>
+                      {volume.label}
+                    </Option>
                   ))}
                 </Select>
               </Form.Item>
             </Col>
           </Row>
+
+          <Form.Item
+            label="Giá"
+            name="price"
+            rules={[{ required: true, message: 'Vui lòng nhập giá' }]}
+          >
+            <InputNumber
+              style={{ width: '100%', textAlign: 'right' }}
+              min={0}
+              step={1000}
+              formatter={(value) =>
+                value ? `${value}`.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' ₫' : ''
+              }
+            />
+          </Form.Item>
 
           <Form.Item>
             <Button type="primary" htmlType="submit" loading={modalLoading}>
-              {editingProduct ? 'Cập nhật' : 'Thêm'} sản phẩm
+              {editingVariant ? 'Cập nhật' : 'Thêm'} biến thể
             </Button>
           </Form.Item>
         </Form>

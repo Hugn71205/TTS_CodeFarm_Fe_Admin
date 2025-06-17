@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Table, Image, Spin, message, Popconfirm, Button } from 'antd';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
 const Product = () => {
   const [products, setProducts] = useState([]);
@@ -94,12 +95,11 @@ sorter: (a: any, b: any) =>
      render: (record: any) => (
       <>
         <Button
+          icon={<EditOutlined />}
           type="link"
           onClick={() => navigate(`/products/update/${record._id}`)}
           style={{ marginRight: 8 }}
-        >
-          Sửa
-        </Button>
+        />
 
         <Popconfirm
           title="Bạn có chắc chắn muốn xóa sản phẩm này?"
@@ -107,9 +107,7 @@ sorter: (a: any, b: any) =>
           okText="Có"
           cancelText="Không"
         >
-          <Button type="link" danger loading={deletingId === record._id}>
-            Xóa
-          </Button>
+          <Button icon={<DeleteOutlined />} type="link" danger loading={deletingId === record._id}/>
         </Popconfirm>
       </>
     ),
@@ -124,7 +122,7 @@ sorter: (a: any, b: any) =>
         <Table
   rowKey="_id"
   columns={columns}
-  dataSource={Array.isArray(products) ? products : []} // bắt buộc phải là mảng
+  dataSource={Array.isArray(products) ? products : []}
   pagination={{ pageSize: 8 }}
 />
 
