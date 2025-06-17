@@ -1,25 +1,33 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect, useState } from "react";
-import { Table, Spin, message, Popconfirm, Button } from "antd";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import type { Volume } from "../../interface/type";
+import React, { useEffect, useState } from 'react';
+import {
+  Table,
+  Button,
+  Popconfirm,
+  Modal,
+  Form,
+  Input,
+  message,
+  Spin,
+} from 'antd';
+import axios from 'axios';
+import type { Volume } from '../../interface/type';
 
 const Volumes: React.FC = () => {
   const [volumes, setVolumes] = useState<Volume[]>([]);
   const [loading, setLoading] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
-  const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingVolume, setEditingVolume] = useState<Volume | null>(null);
+  const [form] = Form.useForm();
 
   const fetchVolumes = async () => {
     setLoading(true);
     try {
-      const response = await axios.get("http://localhost:8888/volumes");
-      const data = response.data || [];
-      setVolumes(data);
-    } catch (error) {
-      message.error("Lấy danh sách dung tích thất bại");
+      const response = await axios.get('http://localhost:8888/volumes');
+      setVolumes(response.data || []);
+    } catch {
+      message.error('Lấy danh sách dung tích thất bại');
     }
     setLoading(false);
   };
@@ -32,73 +40,81 @@ const Volumes: React.FC = () => {
     setDeletingId(id);
     try {
       await axios.delete(`http://localhost:8888/volumes/${id}`);
-      message.success("Xóa dung tích thành công");
+      message.success('Xóa dung tích thành công');
       fetchVolumes();
-    } catch (error) {
-      message.error("Xóa dung tích thất bại");
+    } catch {
+      message.error('Xóa dung tích thất bại');
     }
     setDeletingId(null);
   };
 
+  const openAddModal = () => {
+    setEditingVolume(null);
+    form.resetFields();
+    setIsModalOpen(true);
+  };
+
+  const openEditModal = (volume: Volume) => {
+    setEditingVolume(volume);
+    form.setFieldsValue({ size: volume.size, label: volume.label });
+    setIsModalOpen(true);
+  };
+
+  const handleSubmit = async (values: any) => {
+    try {
+      if (editingVolume) {
+        await axios.put(`http://localhost:8888/volumes/${editingVolume._id}`, values);
+        message.success('Cập nhật dung tích thành công');
+      } else {
+        await axios.post('http://localhost:8888/volumes', values);
+        message.success('Thêm dung tích thành công');
+      }
+      setIsModalOpen(false);
+      fetchVolumes();
+    } catch {
+      message.error(editingVolume ? 'Cập nhật thất bại' : 'Thêm thất bại');
+    }
+  };
+
   const columns = [
     {
-      title: "STT",
-      key: "index",
-      width: 60,
+      title: 'STT',
       render: (_: any, __: any, index: number) => index + 1,
+      width: 60,
     },
     {
-      title: "Dung tích",
-      dataIndex: "size",
-      key: "size",
-      width: 200,
+      title: 'Dung tích',
+      dataIndex: 'size',
+      key: 'size',
     },
     {
-      title: "Mô tả",
-      dataIndex: "label",
-      key: "label",
+      title: 'Mô tả',
+      dataIndex: 'label',
+      key: 'label',
       ellipsis: true,
     },
     {
-      title: "Ngày tạo",
-      dataIndex: "createdAt",
-      key: "createdAt",
-      render: (date?: string) => (date ? new Date(date).toLocaleString() : "-"),
+      title: 'Ngày tạo',
+      dataIndex: 'createdAt',
+      render: (date?: string) => (date ? new Date(date).toLocaleString() : '-'),
       width: 180,
-      sorter: (a: Volume, b: Volume) => {
-        return (
-          (new Date(a.createdAt || "").getTime() || 0) -
-          (new Date(b.createdAt || "").getTime() || 0)
-        );
-      },
     },
     {
-      title: "Ngày cập nhật",
-      dataIndex: "updatedAt",
-      key: "updatedAt",
-      render: (date?: string) => (date ? new Date(date).toLocaleString() : "-"),
+      title: 'Ngày cập nhật',
+      dataIndex: 'updatedAt',
+      render: (date?: string) => (date ? new Date(date).toLocaleString() : '-'),
       width: 180,
-      sorter: (a: Volume, b: Volume) => {
-        return (
-          (new Date(a.updatedAt || "").getTime() || 0) -
-          (new Date(b.updatedAt || "").getTime() || 0)
-        );
-      },
     },
     {
-      title: "Hành Động",
-      key: "action",
-      render: (record: any) => (
+      title: 'Hành động',
+      key: 'actions',
+      render: (record: Volume) => (
         <>
-          <Button
-            type="link"
-            onClick={() => navigate(`/volumes/update/${record._id}`)}
-            style={{ marginRight: 8 }}
-          >
+          <Button type="link" onClick={() => openEditModal(record)}>
             Sửa
           </Button>
           <Popconfirm
-            title="Bạn có chắc chắn muốn xóa dung tích này?"
+            title="Bạn có chắc chắn muốn xóa?"
             onConfirm={() => handleDelete(record._id)}
             okText="Có"
             cancelText="Không"
@@ -114,16 +130,42 @@ const Volumes: React.FC = () => {
 
   return (
     <div style={{ padding: 20 }}>
+      <Button type="primary" onClick={openAddModal} style={{ marginBottom: 16 }}>
+        Thêm dung tích
+      </Button>
       {loading ? (
         <Spin size="large" />
       ) : (
-        <Table
-          rowKey="_id"
-          dataSource={volumes}
-          columns={columns}
-          pagination={{ pageSize: 10 }}
-        />
+        <Table rowKey="_id" dataSource={volumes} columns={columns} pagination={{ pageSize: 10 }} />
       )}
+
+      <Modal
+        title={editingVolume ? 'Cập nhật dung tích' : 'Thêm dung tích'}
+        open={isModalOpen}
+        onCancel={() => setIsModalOpen(false)}
+        footer={null}
+        destroyOnClose
+      >
+        <Form form={form} layout="vertical" onFinish={handleSubmit}>
+          <Form.Item
+            label="Dung tích"
+            name="size"
+            rules={[{ required: true, message: 'Vui lòng nhập dung tích' }]}
+          >
+            <Input placeholder="Nhập dung tích" />
+          </Form.Item>
+
+          <Form.Item label="Mô tả" name="label">
+            <Input.TextArea rows={3} placeholder="Nhập mô tả" />
+          </Form.Item>
+
+          <Form.Item>
+            <Button type="primary" htmlType="submit" loading={loading}>
+              {editingVolume ? 'Cập nhật' : 'Thêm mới'}
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 };

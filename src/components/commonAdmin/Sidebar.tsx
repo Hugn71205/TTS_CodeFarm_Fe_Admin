@@ -46,7 +46,6 @@ const AdminSidebar = () => {
       icon: <FilterFilled />,
       children: [
         { key: "volumelist", label: "Danh sách dung tích" },
-        { key: "volumeadd", label: "Thêm dung tích" },
       ],
     },
     {
@@ -55,7 +54,6 @@ const AdminSidebar = () => {
       icon: <SwitcherFilled />,
       children: [
         { key: "variantlist", label: "Danh sách biến thể" },
-        { key: "variantadd", label: "Thêm biến thể" },
       ],
     },
     {
@@ -64,7 +62,6 @@ const AdminSidebar = () => {
       icon: <DatabaseFilled />,
       children: [
         { key: "categorieslist", label: "Danh sách danh mục" },
-        { key: "categoriesadd", label: "Thêm danh mục" },
       ],
     },
     {
@@ -73,7 +70,6 @@ const AdminSidebar = () => {
       icon: <FolderFilled />,
       children: [
         { key: "brandslist", label: "Danh sách thương hiệu" },
-        { key: "brandsadd", label: "Thêm thương hiệu" },
       ],
     },
     {
@@ -91,7 +87,6 @@ const AdminSidebar = () => {
       icon: <TruckFilled />,
       children: [
         { key: "orderslist", label: "Danh sách đơn hàng" },
-        { key: "ordersadd", label: "Thêm đơn hàng" },
       ],
     },
     {

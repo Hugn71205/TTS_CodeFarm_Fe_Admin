@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useEffect, useState } from 'react';
 import { Table, Image, Spin, message, Popconfirm, Button } from 'antd';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -10,7 +12,6 @@ const Product = () => {
    const navigate = useNavigate();
 
 
-  // Hàm gọi API lấy sản phẩm
 const fetchProducts = async () => {
   setLoading(true);
   try {
@@ -25,7 +26,6 @@ const fetchProducts = async () => {
 };
 
 
-  // Gọi API khi component mount
   useEffect(() => {
     fetchProducts();
   }, []);
@@ -35,7 +35,6 @@ const fetchProducts = async () => {
     try {
       await axios.delete(`http://localhost:8888/products/${id}`);
       message.success('Xóa sản phẩm thành công');
-      // Load lại danh sách sau khi xóa
       fetchProducts();
     } catch (error) {
       message.error('Xóa sản phẩm thất bại');
@@ -43,7 +42,6 @@ const fetchProducts = async () => {
     setDeletingId(null);
   };
 
-  // Định nghĩa các cột bảng
   const columns = [
     {
       title: 'Ảnh',
