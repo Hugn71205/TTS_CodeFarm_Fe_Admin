@@ -11,6 +11,7 @@ import Reviews from "../pages/Reviews/Reviews"
 import AddProduct from "../pages/Products/addProduct"
 import UpdateProduct from "../pages/Products/UpdateProduct"
 import Variant from "../pages/Variants/Variant"
+import StatsPage from "../pages/Admin/Stast"
 
 export const router = createBrowserRouter([
   {
@@ -27,7 +28,8 @@ export const router = createBrowserRouter([
       {path: '/orders', element: <Orders/>},
       {path: '/customers', element: <Customers/>},
       {path: '/reviews', element: <Reviews/>},
-      {path: '/orders-item/order/:id', element: <OrderItemsPage/>},
+      {path: '/orders-item/order/:orderId', element: <OrderItemsPage/>},
+      {path: '/', element:<StatsPage/>}
     ],
   }
 ])

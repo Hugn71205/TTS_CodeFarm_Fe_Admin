@@ -56,10 +56,10 @@ const Orders = () => {
   const handleStatusChange = async (orderId: string, status: string) => {
     try {
       await axios.patch(`http://localhost:8888/orders/${orderId}`, { status });
+      console.log(orderId)
       message.success("Cập nhật trạng thái thành công");
       fetchOrders();
     } catch (err) {
-      console.error(err);
       message.error("Cập nhật trạng thái thất bại");
     }
   };
