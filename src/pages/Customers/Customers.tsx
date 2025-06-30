@@ -23,7 +23,7 @@ const Customers = () => {
   const fetchUsers = async () => {
     setLoading(true);
     try {
-      const res = await axiosInstance.get('auth/');
+      const res = await axiosInstance.get('auth/list');
       setUsers(res.data || []);
     } catch (error) {
       message.error('Không thể tải danh sách người dùng');

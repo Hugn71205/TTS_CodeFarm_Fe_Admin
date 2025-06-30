@@ -1,50 +1,46 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from 'react';
-import {
-  Table,
-  Card,
-  message,
-  Image,
-  Button,
-  Modal,
-  Form,
-  Input,
-  InputNumber,
-  Popconfirm,
-  Space,
-} from 'antd';
+import { Table, Card, message, Image } from 'antd';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
 interface OrderItem {
-  _id?: string;
-  order_id: string;
-  product_variant_id: string;
+  _id: string;
+  order_id: {
+    _id: string;
+    customer_info?: any;
+    receiver_info?: any;
+    shipping_address?: any;
+   
+  };
+  product_variant_id: {
+    _id: string;
+    product_id?: string;
+    volume_id?: string;
+    price: { $numberDecimal: string };
+  };
   product_name: string;
   image?: string;
   price: number;
   quantity: number;
-  total?: number;
-  createdAt?: string;
-  updatedAt?: string;
+  total: number;
+  createdAt: string;
+  updatedAt: string;
 }
 
-const OrderItemsPage: React.FC = () => {
+const OrderItemsPage = () => {
   const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
   const [loading, setLoading] = useState(false);
-  const [open, setOpen] = useState(false);
-  const [editItem, setEditItem] = useState<OrderItem | null>(null);
-  const [form] = Form.useForm();
   const { orderId } = useParams<{ orderId: string }>();
 
   const fetchOrderItems = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`/api/order-items/order/${orderId}`);
-      setOrderItems(res.data);
+      const res = await axios.get(`http://localhost:8888/orders-item/order/${orderId}`);
+      // console.log('API response:', res.data);
+      // res.data trả về trực tiếp mảng order items nên set như sau:
+      setOrderItems(res.data.data.data);
     } catch (error) {
+      console.error('Error loading order items:', error);
       message.error('Không thể tải danh sách order items');
     } finally {
       setLoading(false);
@@ -53,109 +49,59 @@ const OrderItemsPage: React.FC = () => {
 
   useEffect(() => {
     if (orderId) fetchOrderItems();
-  }, [orderId]);
-
-  const handleOpen = (item?: OrderItem) => {
-    setEditItem(item || null);
-    if (item) {
-      form.setFieldsValue(item);
-    } else {
-      form.resetFields();
-    }
-    setOpen(true);
-  };
-
-  const handleDelete = async (id: string) => {
-    try {
-      await axios.delete(`/api/order-items/${id}`);
-      message.success('Xóa thành công');
-      fetchOrderItems();
-    } catch (error) {
-      message.error('Lỗi khi xóa');
-    }
-  };
-
-  const handleSubmit = async (values: OrderItem) => {
-    try {
-      const payload = {
-        ...values,
-        order_id: orderId,
-        total: values.price * values.quantity,
-      };
-
-      if (editItem?._id) {
-        await axios.put(`/api/order-items/${editItem._id}`, payload);
-        message.success('Cập nhật thành công');
-      } else {
-        await axios.post('/api/order-items', payload);
-        message.success('Tạo mới thành công');
-      }
-
-      setOpen(false);
-      fetchOrderItems();
-    } catch (error) {
-      message.error('Lỗi khi lưu dữ liệu');
-    }
-  };
+  }, [`orderId`]);
 
   const columns = [
     {
       title: 'Tên sản phẩm',
       dataIndex: 'product_name',
       key: 'product_name',
+      sorter: (a: OrderItem, b: OrderItem) => a.product_name.localeCompare(b.product_name),
     },
     {
       title: 'Ảnh',
       dataIndex: 'image',
       key: 'image',
-      render: (img: string) => (img ? <Image width={60} src={img} /> : 'Không có'),
+      render: (img: string) => (img ? <Image width={60} src={img} alt="product" /> : 'No Image'),
     },
     {
       title: 'Giá',
-      dataIndex: 'price',
       key: 'price',
-      render: (price: number) => `${price.toLocaleString()}₫`,
+      render: (_: any, record: OrderItem) => {
+        // lấy giá từ product_variant_id.price.$numberDecimal
+        const price = parseFloat(record.product_variant_id.price.$numberDecimal);
+        return price.toLocaleString() + '₫';
+      },
+      sorter: (a: OrderItem, b: OrderItem) =>
+        parseFloat(a.product_variant_id.price.$numberDecimal) - parseFloat(b.product_variant_id.price.$numberDecimal),
     },
     {
       title: 'Số lượng',
       dataIndex: 'quantity',
       key: 'quantity',
+      sorter: (a: OrderItem, b: OrderItem) => a.quantity - b.quantity,
     },
     {
       title: 'Tổng',
+      dataIndex: 'total',
       key: 'total',
-      render: (_: any, record: OrderItem) =>
-        `${(record.price * record.quantity).toLocaleString()}₫`,
+      render: (total: number) => total.toLocaleString() + '₫',
+      sorter: (a: OrderItem, b: OrderItem) => a.total - b.total,
     },
     {
       title: 'Ngày tạo',
       dataIndex: 'createdAt',
       key: 'createdAt',
       render: (date: string) =>
-        new Date(date).toLocaleDateString('vi-VN'),
-    },
-    {
-      title: 'Hành động',
-      key: 'action',
-      render: (_: any, record: OrderItem) => (
-        <Space>
-          <Button onClick={() => handleOpen(record)}>Sửa</Button>
-          <Popconfirm
-            title="Bạn có chắc chắn muốn xóa?"
-            onConfirm={() => handleDelete(record._id!)}
-          >
-            <Button danger>Xóa</Button>
-          </Popconfirm>
-        </Space>
-      ),
+        new Date(date).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' }),
+      sorter: (a: OrderItem, b: OrderItem) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
     },
   ];
 
   return (
     <Card
       title="Danh sách Order Items"
-      extra={<Button type="primary" onClick={() => handleOpen()}>Thêm</Button>}
-      style={{ margin: 24, borderRadius: 8 }}
+      style={{ margin: 24, borderRadius: 8, boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}
     >
       <Table
         rowKey="_id"
@@ -164,40 +110,6 @@ const OrderItemsPage: React.FC = () => {
         loading={loading}
         pagination={{ pageSize: 10 }}
       />
-
-      <Modal
-        open={open}
-        title={editItem ? 'Cập nhật Order Item' : 'Thêm Order Item'}
-        onCancel={() => setOpen(false)}
-        onOk={() => form.submit()}
-        destroyOnClose
-      >
-        <Form
-          form={form}
-          layout="vertical"
-          onFinish={handleSubmit}
-        >
-          <Form.Item name="product_name" label="Tên sản phẩm" rules={[{ required: true }]}>
-            <Input />
-          </Form.Item>
-
-          <Form.Item name="image" label="Ảnh">
-            <Input />
-          </Form.Item>
-
-          <Form.Item name="price" label="Giá" rules={[{ required: true }]}>
-            <InputNumber min={0} style={{ width: '100%' }} />
-          </Form.Item>
-
-          <Form.Item name="quantity" label="Số lượng" rules={[{ required: true }]}>
-            <InputNumber min={1} style={{ width: '100%' }} />
-          </Form.Item>
-
-          <Form.Item name="product_variant_id" label="ID biến thể" rules={[{ required: true }]}>
-            <Input />
-          </Form.Item>
-        </Form>
-      </Modal>
     </Card>
   );
 };
